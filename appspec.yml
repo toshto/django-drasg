@@ -1,0 +1,78 @@
+version: 0.0
+os: linux
+
+files:
+  # You can specify one or more mappings in the files section.
+  - source: source
+    destination: /var/www/mysite/
+
+  # Django config files
+  - source: deploy/conf/uwsgi.ini
+    destination: /var/www/mysite/
+  - source: deploy/conf/db.conf
+    destination: /var/www/mysite/
+
+  # Apache config files
+  - source: deploy/conf/app_on.conf
+    destination: /etc/httpd/conf/
+  - source: deploy/conf/app_maint.conf
+    destination: /etc/httpd/conf/
+
+permissions:
+  - object: /var/www/mysite
+    owner: apache
+    group: apache
+    mode: 750
+    type:
+      - directory
+
+hooks:
+  ### 以下の3つのhookは前回デプロイ済みの場合に呼ばれる。
+  BeforeBlockTraffic:
+    #  ** 旧インスタンスで実行される。
+    - location: deploy/hooks.sh
+      runas: root
+
+  # BlockTraffic: この間に疎通停止する。長い。5分30秒
+
+  AfterBlockTraffic:
+    # ** 旧インスタンスで実行される。
+    - location: deploy/hooks.sh
+      runas: root
+  ApplicationStop:
+    # ** 旧インスタンスで実行される。
+    - location: deploy/hooks.sh
+      runas: root
+
+  # DownloadBundle: デプロイ物件のダウンロードをする。
+
+  BeforeInstall:
+    # @ デプロイ物件展開前の準備作業(APサーバ停止/メンテ表示など)
+    - location: deploy/hooks.sh
+      runas: root
+
+  # Install: デプロイ物件展開
+
+  AfterInstall:
+    # @ デプロイ物件展開後の設定作業
+    - location: deploy/hooks.sh
+      runas: root
+  ApplicationStart:
+    # @ APサーバ起動
+    - location: deploy/hooks.sh
+      runas: root
+  ValidateService:
+    # @ チェック＆オンライン開始
+    - location: deploy/hooks.sh
+      runas: root
+  BeforAllowTraffic:
+    # ** 旧インスタンスで実行される。
+    - location: deploy/hooks.sh
+      runas: root
+
+  # AllowTraffic: この間に疎通開始する。長い。2 分 30 秒
+
+  AfterAllowTraffic:
+    # @
+    - location: deploy/hooks.sh
+      runas: root
