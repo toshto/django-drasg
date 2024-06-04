@@ -1,0 +1,16 @@
+使い方
+
+boto3cf-drasgプロジェクトで構築したスタックにCodeDeployでデプロイできるDjangoサンプルアプリです。
+
+1.デプロイ資材を以下のスクリプトを実行して配備します。
+  CodeDeployはクロスリージョンデプロイができません。リージョンごとに実行してください。
+
+	./packer.py <SiteID> <Region>
+
+
+2.CodeDeployのデプロイ設定からデプロイの作成をしてください。
+  リビジョンの場所には以下のURLを指定してください。
+
+	s3://SiteID.Region.DomainName/release/mysite.tar.gz
+
+  appspec.yamlにフックごとの処理が定義されています。
