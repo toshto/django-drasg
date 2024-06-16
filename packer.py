@@ -9,15 +9,16 @@ import sys
 try:
     me = sys.argv.pop(0)
     stackname = sys.argv.pop(0)
+    domainname = sys.argv.pop(0)
     region = sys.argv.pop(0)
 except Exception as e:
-    print("Usage: packer.py <stackname> <region>")
+    print("Usage: packer.py <stackname> <domainname> <region>")
     print(e)
     sys.exit(1)
 
 instname = "db1-" + stackname
 cache = "memca1-" + stackname
-BUCKET = stackname + '.' + region + '.xxxxxxxx.com'
+BUCKET = stackname + '.' + region + '.' + domainname
 PACKAGE = 'mysite.tar.gz'
 
 try:

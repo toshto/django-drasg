@@ -5,7 +5,7 @@ boto3cf-drasgプロジェクトで構築したスタックにCodeDeployでデプ
 1.デプロイ資材を以下のスクリプトを実行して配備します。
   CodeDeployはクロスリージョンデプロイができません。リージョンごとに実行してください。
 
-	./packer.py <SiteID> <Region>
+	./packer.py <SiteID> <domainname> <Region>
 
 
 2.CodeDeployのデプロイ設定からデプロイの作成をしてください。
